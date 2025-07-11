@@ -25,8 +25,8 @@ const test = new HashMap()
 
 // test function entries()
 console.log(test.entries());
-console.log(test.getBucketNum());  // 12
-console.log(test.size());          // 16
+console.log(test.getBucketNum());   // 12
+console.log(test.size());           // 16
 
 // test function set() when value is modified
 test.set('kite', 'reddish');
@@ -35,11 +35,11 @@ console.log(test.entries());
 // trigger the hash map’s growth functionality and doubling its capacity
 test.set('uphone', 'teal');
 console.log(test.entries());
-console.log(test.getBucketNum());  // 15
-console.log(test.size());          // 32
+console.log(test.getBucketNum());   // 15
+console.log(test.size());           // 32
 
 // test function get()
-console.log(test.get("kite"));     // reddish
-console.log(test.get("turtle"));   // null
-console.log(test.get("kiwi"));     // brown
-console.log(test.get("salmon"));   // null
+console.log(test.get("kite"));      // reddish
+console.log(test.get("turtle"));    // null
+console.log(test.get("kiwi"));      // brown
+console.log(test.get("salmon"));    // null

@@ -66,7 +66,6 @@ class HashMap {
     // howevwer, if recusrsively call set function, set function may trigger condition of expanding capacity again when recusrsively calling set
     // seperate resize function outside set function to avoid chance of infinite recursion inside set function
     resize(){
-      const oldCapacity = this.#capacity;
       // recalculate the indexes of all key-value pairs, and allocate pairs to the new bucket
       const allMapPairs = this.entries()
 
@@ -76,6 +75,10 @@ class HashMap {
       // the structure of each pair is [key, value]
       allMapPairs.forEach((pair) => {
         const index = this.hash(pair[0]);
+        if (index < 0 || index >= this.#capacity) {
+            throw new Error("Trying to access index out of bounds");
+        }
+
         if(this.#buckets[index] === undefined) {
             this.#buckets[index] = new LinkedList();
         }
@@ -86,6 +89,10 @@ class HashMap {
     // take a key and returns the value assigned to the key and otherwise returns null
     get(key) {
       const index = this.hash(key);
+      if (index < 0 || index >= this.#capacity) {
+            throw new Error("Trying to access index out of bounds");
+      }
+
       if(this.#buckets[index] === undefined) {
         console.log("The list is not exist!");
         return null;
@@ -101,12 +108,58 @@ class HashMap {
       }
     }
 
+    // take a key and return true or false based on whether the key is in the hash map
+    has(key) {
+      const index = this.hash(key);
+      if (index < 0 || index >= this.#capacity) {
+            throw new Error("Trying to access index out of bounds");
+      }
+
+      if(this.#buckets[index] === undefined) {
+        console.log("The list is not exist!");
+        return false;
+      }
+      else {
+        let result = this.#buckets[index].contains(key);
+        if(result === false) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
+    // if the given key is in the hash map, it should remove the entry with that key and return true.
+    // if the list of the removed entry has no entry, clear the bucket
+    // if the key isn’t in the hash map, it should return false.
+    remove(key) {
+      const index = this.hash(key);
+      if (index < 0 || index >= this.#capacity) {
+            throw new Error("Trying to access index out of bounds");
+      }
+
+      if(this.#buckets[index] === undefined) {
+        return false;
+      } else {
+        let value = this.#buckets[index].erase(key);
+        // don't use '==' here, because `0 == false` is true (0 is considered a "falsy" value) 
+        if(value === false) {
+          return false;
+        } else {
+          if(value === 0){
+            this.#buckets[index] = undefined;
+          }
+          return true;
+        }
+      }
+    }
+
     // returns an array that contains each [key, value] pair
     entries() {
         let allMapPairs = [];
         this.#buckets.forEach((element) => {
             if(element !== undefined) {
-                allMapPairs = allMapPairs.concat(element.getAllPairs());
+              allMapPairs = allMapPairs.concat(element.getAllPairs());
             }
         });
 
@@ -163,6 +216,7 @@ class LinkedList {
     return pairs;
   }
 
+  // find the value at the given key
   // return value if the passed in key is in the list and otherwise returns false
   contains(key) {
     if (this.headNode === null) {
@@ -181,6 +235,50 @@ class LinkedList {
       return false;
     }
   }
+
+  // remove a pair at the given key
+  // if the passed in key is in the list then return length of the list without the removed pair
+  // if the passed in key is not in the list then returns false
+  erase(key) {
+    if (this.headNode === null) {
+      console.log("The list is empty!");
+      return false;
+    }  else {
+      // deal with head node seperately
+      if (this.headNode.getKey() === key) {
+        this.headNode = this.headNode.nextNode;
+        return this.getSize();
+      } else {
+        let previous = null,
+        current = this.headNode;
+
+        while (current !== null) {
+          if (current.getKey() === key) {
+            previous.nextNode = current.nextNode;
+            return this.getSize();
+          }
+
+          previous = current;
+          current = current.nextNode;
+        }
+        return false;
+      }
+    }
+  }
+
+  // return the total number of nodes in the list
+  getSize() {
+    let size = 0;
+    let current = this.headNode;
+
+    while (current !== null) {
+      size += 1;
+      current = current.nextNode;
+    }
+
+    return size;
+  }
+
 }
 
 class Node {
@@ -188,6 +286,10 @@ class Node {
     this.key = key;
     this.value = value;
     this.nextNode = nextNode;
+  }
+
+  getKey() {
+    return this.key;
   }
 
   getPair() {
