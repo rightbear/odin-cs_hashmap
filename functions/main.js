@@ -35,5 +35,6 @@ console.log(test.entries());
 // trigger the hash map’s growth functionality and doubling its capacity
 test.set('uphone', 'teal');
 console.log(test.entries());
-console.log(test.getBucketNum());  // 13
+console.log(test.getBucketNum());  // 15
 console.log(test.size());          // 32
+

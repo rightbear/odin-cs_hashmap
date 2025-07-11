@@ -43,6 +43,7 @@ class HashMap {
     } 
 
     // if a key already exists, then the old value is overwritten
+    // if collision happens, follow the Linked List in bucket to add/update new value
     set(key, value) {
         const index = this.hash(key);
         if (index < 0 || index >= this.#capacity) {
@@ -56,9 +57,34 @@ class HashMap {
 
         // grow the hash map when there are more entries than prduct of capacity and loadFactor
         if(this.getBucketNum() > ((this.#capacity) * (this.#loadFactor))) {
-            this.#buckets = [...(this.#buckets), ...(new Array(this.#capacity).fill(undefined))];
             this.#capacity *= 2;
+
+            // recalculate the indexes of all key-value pairs, and allocate pairs to the new bucket
+            const allMapPairs = this.entries()
+            this.#buckets = new Array(this.#capacity).fill(undefined);
+
+            allMapPairs.forEach((pair) => {
+              this.set(pair[0], pair[1]);
+            });
         }
+    }
+
+    // take a key and returns the value assigned to the key and otherwise returns null
+    get(key) {
+      const index = this.hash(key);
+      if(this.#buckets[index] === undefined) {
+        console.log("The list is not exist!");
+        return null;
+      }
+      else {
+        let value = this.#buckets[index].contains(key);
+        // don't use '==' here, because `"" == false` is true (empty string is considered a "falsy" value) 
+        if(value === false) {
+          return null;
+        } else {
+          return value;
+        }
+      }
     }
 
     // returns an array that contains each [key, value] pair
@@ -89,7 +115,7 @@ class LinkedList {
     } else {
       let current = this.headNode;
       while (current !== null) {
-        // if the key already exist, update the value
+        // if the key already exist in one node, update the value
         if(current.key === newKey) {
             current.value = newValue;
             return;
@@ -121,6 +147,25 @@ class LinkedList {
     }
 
     return pairs;
+  }
+
+  // return value if the passed in key is in the list and otherwise returns false
+  contains(key) {
+    if (this.headNode === null) {
+      console.log("The list is already empty!");
+      return false;
+    } else {
+      let current = this.headNode;
+
+      while (current != null) {
+        if (current.key === key) {
+          return current.value;
+        } else {
+          current = current.nextNode;
+        }
+      }
+      return false;
+    }
   }
 }
 
