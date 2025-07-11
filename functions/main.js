@@ -38,3 +38,8 @@ console.log(test.entries());
 console.log(test.getBucketNum());  // 15
 console.log(test.size());          // 32
 
+// test function get()
+console.log(test.get("kite"));     // reddish
+console.log(test.get("turtle"));   // null
+console.log(test.get("kiwi"));     // brown
+console.log(test.get("salmon"));   // null
