@@ -43,3 +43,17 @@ console.log(test.get("kite"));      // reddish
 console.log(test.get("turtle"));    // null
 console.log(test.get("kiwi"));      // brown
 console.log(test.get("salmon"));    // null
+
+// test function has()
+console.log(test.has("elephant"));  // true
+console.log(test.has("shark"));     // false
+console.log(test.has("mouse"));     // true
+console.log(test.has("tiger"));     // false
+
+// test function remove()
+console.log(test.remove("grape"));     // true
+console.log(test.getBucketNum());      // 14
+console.log(test.remove("star"));      // false
+console.log(test.remove("jean"));      // true
+console.log(test.getBucketNum());      // 13
+console.log(test.remove("dolphine"));  // false
