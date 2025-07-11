@@ -23,6 +23,11 @@ class HashMap {
         return nonEmpy;
     }
 
+    // get number of all buckets in hashmap
+    size() {
+      return this.#capacity;
+    }
+
     // take a key and produces a hash code with it
     // assume the function only handle keys of type string
     hash(key) {
@@ -83,16 +88,20 @@ class LinkedList {
       this.prepend(newKey, newValue);
     } else {
       let current = this.headNode;
-      while (current.nextNode !== null) {
-        current = current.nextNode;
-
+      while (current !== null) {
         // if the key already exist, update the value
         if(current.key === newKey) {
             current.value = newValue;
             return;
         }
+
+        // if the currently last node has been reached, add the new node
+        if(current.nextNode === null) {
+          current.nextNode = new Node(newKey, newValue);
+          return;
+        }
+        current = current.nextNode;
       }
-      current.nextNode = new Node(newKey, newValue);
     }
   }
 

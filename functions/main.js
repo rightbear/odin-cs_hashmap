@@ -18,10 +18,22 @@ const test = new HashMap()
  test.set('jacket', 'blue');
  test.set('kite', 'pink');
  test.set('lion', 'golden');
+ test.set('kiwi', 'brown');
+ test.set('mouse', 'grey');
+ test.set('jean', 'indigo');
+ test.set('moon', 'silver');
 
 // test function entries()
 console.log(test.entries());
+console.log(test.getBucketNum());  // 12
+console.log(test.size());          // 16
+
+// test function set() when value is modified
+test.set('kite', 'reddish');
+console.log(test.entries());
 
 // trigger the hash map’s growth functionality and doubling its capacity
-test.set('moon', 'silver');
+test.set('uphone', 'teal');
 console.log(test.entries());
+console.log(test.getBucketNum());  // 13
+console.log(test.size());          // 32
