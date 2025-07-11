@@ -57,16 +57,30 @@ class HashMap {
 
         // grow the hash map when there are more entries than prduct of capacity and loadFactor
         if(this.getBucketNum() > ((this.#capacity) * (this.#loadFactor))) {
-            this.#capacity *= 2;
-
-            // recalculate the indexes of all key-value pairs, and allocate pairs to the new bucket
-            const allMapPairs = this.entries()
-            this.#buckets = new Array(this.#capacity).fill(undefined);
-
-            allMapPairs.forEach((pair) => {
-              this.set(pair[0], pair[1]);
-            });
+            this.resize();
         }
+    }
+
+    // the function help move values from old buckets to new buckets with bigger capacity
+    // inside the set function, you may want to directly expand capacity and call set function again for moving values 
+    // howevwer, if recusrsively call set function, set function may trigger condition of expanding capacity again when recusrsively calling set
+    // seperate resize function outside set function to avoid chance of infinite recursion inside set function
+    resize(){
+      const oldCapacity = this.#capacity;
+      // recalculate the indexes of all key-value pairs, and allocate pairs to the new bucket
+      const allMapPairs = this.entries()
+
+      this.#capacity *= 2;
+      this.#buckets = new Array(this.#capacity).fill(undefined);
+
+      // the structure of each pair is [key, value]
+      allMapPairs.forEach((pair) => {
+        const index = this.hash(pair[0]);
+        if(this.#buckets[index] === undefined) {
+            this.#buckets[index] = new LinkedList();
+        }
+        this.#buckets[index].append(pair[0], pair[1]);
+      });
     }
 
     // take a key and returns the value assigned to the key and otherwise returns null
