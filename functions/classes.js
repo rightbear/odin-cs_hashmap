@@ -154,6 +154,51 @@ class HashMap {
       }
     }
 
+    // return the number of stored keys in the hash map
+    length() {
+      let pairsNum = 0;
+        this.#buckets.forEach((element) => {
+            if(element !== undefined) {
+              pairsNum += element.getSize();
+            }
+        });
+
+        return pairsNum;
+    }
+    
+    // remove all entries in the hash map
+    clear() {
+      this.#buckets.forEach((element, index, bucketArray) => {
+          if(element !== undefined) {
+            bucketArray[index] = undefined;
+          }
+      });
+    }
+
+    // return an array containing all the keys inside the hash map
+    keys() {
+      let allMapPairs = [];
+        this.#buckets.forEach((element) => {
+            if(element !== undefined) {
+              allMapPairs = allMapPairs.concat(element.getAllKeys());
+            }
+        });
+
+        return allMapPairs;
+    }
+
+    // return an array containing all the values
+    values() {
+      let allMapPairs = [];
+        this.#buckets.forEach((element) => {
+            if(element !== undefined) {
+              allMapPairs = allMapPairs.concat(element.getAllValues());
+            }
+        });
+
+        return allMapPairs;
+    }
+
     // returns an array that contains each [key, value] pair
     entries() {
         let allMapPairs = [];
@@ -203,7 +248,32 @@ class LinkedList {
     this.headNode = new Node(newKey, newValue, this.headNode);
   }
 
-  // return the array of all nodes in the list
+  // return the array of all keys in the list
+  getAllKeys() {
+    const keys = [];
+    let current = this.headNode;
+
+    while (current !== null) {
+      keys.push(current.getKey());
+      current = current.nextNode;
+    }
+
+    return keys;
+  }
+
+  getAllValues() {
+    const values = [];
+    let current = this.headNode;
+
+    while (current !== null) {
+      values.push(current.getValue());
+      current = current.nextNode;
+    }
+
+    return values;
+  }
+
+  // return the array of all pairs in the list
   getAllPairs() {
     const pairs = [];
     let current = this.headNode;
@@ -290,6 +360,10 @@ class Node {
 
   getKey() {
     return this.key;
+  }
+
+  getValue() {
+    return this.value;
   }
 
   getPair() {
