@@ -14,8 +14,8 @@ class HashMap {
 
     // get number of non-empty buckets in hashmap
     getBucketNum(){
-        const nonEmpy = this.#buckets.reduce((accumulator, currentValue) => {
-            if(currentValue !== undefined) {
+        const nonEmpy = this.#buckets.reduce((accumulator, currentBucket) => {
+            if(currentBucket !== undefined) {
                 accumulator += 1;
             }
             return accumulator;
@@ -43,7 +43,7 @@ class HashMap {
     } 
 
     // if a key already exists, then the old value is overwritten
-    // if collision happens, follow the Linked List in bucket to add/update new value
+    // if collision happens, follow the Linked List in bucket to add new value
     set(key, value) {
         const index = this.hash(key);
         if (index < 0 || index >= this.#capacity) {
@@ -61,8 +61,8 @@ class HashMap {
         }
     }
 
-    // the function help move values from old buckets to new buckets with bigger capacity
-    // inside the set function, you may want to directly expand capacity and call set function again for moving values 
+    // the function help move pairs from old buckets to new buckets with bigger capacity
+    // inside the set function, you may want to directly expand capacity and call set function again for moving pairs 
     // howevwer, if recusrsively call set function, set function may trigger condition of expanding capacity again when recusrsively calling set
     // seperate resize function outside set function to avoid chance of infinite recursion inside set function
     resize(){
@@ -336,7 +336,7 @@ class LinkedList {
     }
   }
 
-  // return the total number of nodes in the list
+  // return the total number of pairs in the list
   getSize() {
     let size = 0;
     let current = this.headNode;

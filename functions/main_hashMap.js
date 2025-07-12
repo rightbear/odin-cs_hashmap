@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-import { HashMap } from "./classes.js";
+import { HashMap } from "./classes_hashMap.js";
 
 // example uses class syntax - adjust as necessary
 const test = new HashMap()
